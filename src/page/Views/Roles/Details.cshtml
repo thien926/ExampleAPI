@@ -1,0 +1,49 @@
+@model Role
+
+@{
+    ViewData["Title"] = "Role";
+}
+
+<h1>Role - Details</h1>
+
+<div>
+    <h4>Role</h4>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Detail)
+        </dt>
+        <dd class = "col-sm-10">
+            @* @{
+                string[] arr = Model.Detail.Split("&");
+                string s= "";
+                foreach (var item in arr)
+                {
+                    if(item != null)
+                    {
+                        s += item.Split(" ")[1];
+                    }
+                }
+                <text>'@s'</text>
+            } *@
+            @Html.DisplayFor(model => model.Detail)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

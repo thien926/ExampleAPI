@@ -1,0 +1,60 @@
+@model CreateFormTypeViewModel
+
+@{
+    ViewData["Title"] = "FormType";
+}
+
+<h1>FormType - Create</h1>
+
+<h4>FormType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="formType.Id" />
+            @* <div class="form-group" enable="false">
+                <label asp-for="formType.Id" class="control-label"></label>
+                <input asp-for="formType.Id" class="form-control" disabled/>
+                <span asp-validation-for="formType.Id" class="text-danger" ></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="formType.Code" class="control-label"></label>
+                <input asp-for="formType.Code" class="form-control" />
+                <span asp-validation-for="formType.Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="formType.Description" class="control-label"></label>
+                <input asp-for="formType.Description" class="form-control" />
+                <span asp-validation-for="formType.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="formType.CustomerId" class="control-label"></label>
+                <select asp-for="formType.CustomerId" class="form-control" >
+                    <option value="">None</option>
+                    @{
+                        if(Model.customers != null)
+                        {
+                            foreach (var item in Model.customers)
+                            {
+                                <option value="@item.Id">@item.Id (@item.FirstName @item.LastName)</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="formType.CustomerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,65 @@
+// https://dbdiagram.io/d
+// Creating tables
+Table Users as U {
+  Id int [pk, increment] // auto-increment
+  Name varchar
+  Email varchar
+  Password varchar
+  RoleId int 
+  TenantId int
+}
+
+Table Tenant {
+  Id int [pk]
+  Name varchar
+ }
+
+Table Customer {
+  Id int [pk]
+  FirstName varchar
+  LastName varchar
+  Email varchar
+  Phone varchar
+  MobilePhone varchar
+  Gender varchar
+  Properties varchar
+  TenantId int
+}
+
+Table Role {
+  Id int [pk]
+  Name varchar
+}
+
+Table Permission {
+  Id int [pk]
+  Name varchar
+}
+
+Table RolePermission  {
+  RoleId int [pk]
+  PermissionId int [pk]
+}
+
+Table FormType {
+  Id int [pk]
+  Code varchar
+  Description varchar
+  CustomerId int
+}
+
+// Table CustomerFormType {
+//   CustomerId int [pk]
+//   FormTypeId int [pk]
+// }
+
+Ref: Permission.Id < RolePermission.PermissionId
+Ref: Role.Id < RolePermission.RoleId
+Ref: Role.Id < Users.RoleId
+Ref: Tenant.Id < Users.TenantId
+Ref: Tenant.Id < Customer.TenantId
+Ref: FormType.CustomerId > Customer.Id
+// Ref: FormType.Id < CustomerFormType.FormTypeId
+// Ref: Customer.Id < CustomerFormType.CustomerId
+
+

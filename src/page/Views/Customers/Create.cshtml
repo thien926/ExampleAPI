@@ -1,0 +1,91 @@
+@model CreateCustomerViewModel
+
+@{
+    ViewData["Title"] = "Customer";
+}
+
+<h1>Customer - Create</h1>
+
+<h4>Customer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="customer.Id" />
+            @* <div class="form-group" enable="false">
+                <label asp-for="customer.Id" class="control-label"></label>
+                <input asp-for="customer.Id" class="form-control" disabled/>
+                <span asp-validation-for="customer.Id" class="text-danger" ></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="customer.FirstName" class="control-label"></label>
+                <input asp-for="customer.FirstName" class="form-control" />
+                <span asp-validation-for="customer.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.LastName" class="control-label"></label>
+                <input asp-for="customer.LastName" class="form-control" />
+                <span asp-validation-for="customer.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.Email" class="control-label"></label>
+                <input asp-for="customer.Email" class="form-control" />
+                <span asp-validation-for="customer.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.Phone" class="control-label"></label>
+                <input asp-for="customer.Phone" class="form-control" />
+                <span asp-validation-for="customer.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.MobilePhone" class="control-label"></label>
+                <input asp-for="customer.MobilePhone" class="form-control" />
+                <span asp-validation-for="customer.MobilePhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.Gender" class="control-label"></label>
+                @* <input asp-for="customer.Gender" class="form-control" /> *@
+                <select asp-for="customer.Gender" asp-items="Model.customer.CheeseGenders" class="form-control" ></select>
+                <span asp-validation-for="customer.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.Properties" class="control-label"></label>
+                <input asp-for="customer.Properties" class="form-control" />
+                <span asp-validation-for="customer.Properties" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.TenantId" class="control-label"></label>
+                <select asp-for="customer.TenantId" class="form-control" >
+                    <option value="">None</option>
+                    @{
+                        if(Model.tenants != null)
+                        {
+                            foreach (var item in Model.tenants)
+                            {
+                                <option value="@item.Id">@item.Name (Id: @item.Id)</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="customer.TenantId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        
+    </script>
+}

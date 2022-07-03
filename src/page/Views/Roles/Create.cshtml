@@ -1,0 +1,161 @@
+@model CreateRoleViewModel
+
+@{
+    ViewData["Title"] = "Role";
+}
+
+@section Stylesheet {
+    <style>
+        .close {
+            @* cursor: pointer;
+            position: absolute;
+            margin-left: 10%;
+            padding: 12px 16px;
+            transform: translate(0%, -50%);
+            border: 1px solid black; *@
+                cursor: pointer;
+                position: absolute;
+                margin-top: 1%;
+                margin-left: 7%;
+                padding: 0px 17px;
+                transform: translate(0%, -50%);
+                border: 1px solid #c1c1c1;
+        }
+    </style>
+}
+
+<h1>Role - Create</h1>
+
+<h4>Role</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="myDiv">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="role.Id" />
+            @* <div class="form-group" enable="false">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" disabled/>
+                <span asp-validation-for="Id" class="text-danger" ></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="role.Name" class="control-label"></label>
+                <input id="Name" asp-for="role.Name" class="form-control" />
+                <span asp-validation-for="role.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Details</label>
+                <ul id="choosePermission">
+                    @* @{
+                        if(Model.choosePermissions != null)
+                        {
+                            foreach (var item in Model.choosePermissions)
+                            {
+                                <li>@item.Id     @item.Name <span class="close">&times;</span></li>
+                            }
+                        }
+                    } *@
+                    @* @for(int i = 0; i < 10; ++i)
+                    {
+                        <li>8765f09c-26cc-44ad-43fc-08da54fa2e7f @i <span class="close">&times;</span></li>
+                    } *@
+                </ul>
+                
+                <div class="row">
+                    
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+                    
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <label class="ml-3">Add Details</label>
+                        <select id="selectPermission">
+                            @{
+                                if(Model.permissions != null)
+                                {
+                                    foreach (var item in Model.permissions)
+                                    {
+                                        <option value="@item.Id&@item.Name">@item.Name</option>
+                                    }
+                                    
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-5">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        var choosePermission = [];
+        $("#selectPermission").change(function(){
+            var value = $("#selectPermission").val();
+            if(!choosePermission.find(item => item == value))
+            {
+                choosePermission.push(value);
+            }
+
+            var result = '', temp;
+            choosePermission.forEach(item => {
+                temp = item.split("&");
+                result += `<li id="`+ temp[0] +`">` + temp[0] +`   <b>` + temp[1] + `</b><span class="close" onclick="closePermission('`+ item +`')">&times;</span></li>`;
+            });
+            $("#choosePermission").html(result);
+        });
+
+        function closePermission(item)
+        {
+            const index = choosePermission.indexOf(item);
+            if (index > -1) {
+                choosePermission.splice(index, 1); // 2nd parameter means remove one item only
+            }
+
+            $("#"+item.split('&')[0]).remove();
+            console.log(choosePermission.length);
+        }
+
+        $('#myDiv').submit(function (e) {
+            e.preventDefault();
+            for(let i = 0; i <  choosePermission.length; ++i)
+            {
+                choosePermission[i] = choosePermission[i].split('&')[0];
+            }
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            
+            $.ajax({
+                url: "@Url.Action("Create")",
+                type: 'POST',
+                data: { 
+                    __RequestVerificationToken: token, 
+                    Role: {
+                        name : $("#Name").val(),
+                        detail : choosePermission.join('&')
+                    }
+                },
+                success: function (result) {
+                    location.href = '/Roles';
+                },
+                error: function(error) 
+                {
+                    alert(error);
+                }
+            });
+            return false;
+        });
+    </script>
+}
